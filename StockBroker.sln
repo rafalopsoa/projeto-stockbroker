@@ -1,0 +1,23 @@
+# Criação da Solução
+dotnet new sln -n StockBroker
+
+# Criação dos Projetos (Pastas src/ e tests/ criadas manualmente ou via script)
+dotnet new classlib -n StockBroker.Domain -o src/StockBroker.Domain
+dotnet new classlib -n StockBroker.Application -o src/StockBroker.Application
+dotnet new classlib -n StockBroker.Infrastructure -o src/StockBroker.Infrastructure
+dotnet new webapi -n StockBroker.API -o src/StockBroker.API
+
+dotnet new xunit -n StockBroker.UnitTests -o tests/StockBroker.UnitTests
+dotnet new xunit -n StockBroker.IntegrationTests -o tests/StockBroker.IntegrationTests
+dotnet new specflow -n StockBroker.BDDTests -o tests/StockBroker.BDDTests
+
+# Adicionando projetos à solução
+dotnet sln add src/**/*.csproj tests/**/*.csproj
+
+# Configurando as Referências (A Regra de Dependência do Clean Architecture)
+dotnet add src/StockBroker.Application reference src/StockBroker.Domain
+dotnet add src/StockBroker.Infrastructure reference src/StockBroker.Application
+dotnet add src/StockBroker.API reference src/StockBroker.Application
+dotnet add src/StockBroker.API reference src/StockBroker.Infrastructure
+
+dotnet add tests/StockBroker.UnitTests reference src/StockBroker.Application
